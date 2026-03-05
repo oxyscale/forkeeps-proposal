@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OxyScale AI - ForKeeps Merch Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0B0F1A;
+  --surface: #111827;
+  --card: #1a2130;
+  --card-hover: #1f2738;
+  --border: rgba(255,255,255,0.06);
+  --border-light: rgba(255,255,255,0.1);
+  --primary: #E8470B;
+  --primary-soft: rgba(232,71,11,0.1);
+  --primary-border: rgba(232,71,11,0.25);
+  --primary-glow: rgba(232,71,11,0.06);
+  --green: #22c55e;
+  --green-soft: rgba(34,197,94,0.08);
+  --green-border: rgba(34,197,94,0.2);
+  --red: #ef4444;
+  --red-soft: rgba(239,68,68,0.08);
+  --red-border: rgba(239,68,68,0.2);
+  --text: #e2e8f0;
+  --text-dim: #7a8ba3;
+  --text-muted: #4a5568;
+  --sora: 'Sora', sans-serif;
+  --dm: 'DM Sans', sans-serif;
+}
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--dm);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Progress bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), #ff6b35);
+  z-index: 100;
+  transition: width 0.4s ease;
+}
+
+/* Slide counter */
+.slide-counter {
+  position: fixed;
+  top: 20px;
+  right: 28px;
+  font-family: var(--sora);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  z-index: 100;
+  letter-spacing: 1px;
+}
+
+/* Nav dots */
+.dots-nav {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  padding: 0;
+}
+.dot.active {
+  background: var(--primary);
+  box-shadow: 0 0 8px rgba(232,71,11,0.4);
+  transform: scale(1.3);
+}
+.dot:hover { background: var(--text-dim); }
+
+/* Nav buttons */
+.nav-btn {
+  position: fixed;
+  bottom: 28px;
+  z-index: 100;
+  background: var(--card);
+  border: 1px solid var(--border-light);
+  color: var(--text);
+  font-family: var(--dm);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--card-hover); border-color: rgba(255,255,255,0.15); }
+.nav-prev { left: 28px; }
+.nav-next { right: 28px; background: var(--primary); border-color: var(--primary); }
+.nav-next:hover { background: #d13d08; }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+/* Slides */
+.slides-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  overflow-y: auto;
+  padding: 60px 80px 100px;
+}
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.slide.center-content {
+  align-items: center;
+  justify-content: center;
+}
+.slide-inner {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Stagger animation */
+.slide.active .stagger { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stagger:nth-child(1) { animation-delay: 0.05s; }
+.stagger:nth-child(2) { animation-delay: 0.12s; }
+.stagger:nth-child(3) { animation-delay: 0.19s; }
+.stagger:nth-child(4) { animation-delay: 0.26s; }
+.stagger:nth-child(5) { animation-delay: 0.33s; }
+.stagger:nth-child(6) { animation-delay: 0.40s; }
+.stagger:nth-child(7) { animation-delay: 0.47s; }
+.stagger:nth-child(8) { animation-delay: 0.54s; }
+.stagger:nth-child(9) { animation-delay: 0.61s; }
+.stagger:nth-child(10) { animation-delay: 0.68s; }
+.stagger:nth-child(11) { animation-delay: 0.75s; }
+.stagger:nth-child(12) { animation-delay: 0.82s; }
+.stagger:nth-child(13) { animation-delay: 0.89s; }
+.stagger:nth-child(14) { animation-delay: 0.96s; }
+.stagger:nth-child(15) { animation-delay: 1.03s; }
+.stagger:nth-child(16) { animation-delay: 1.10s; }
+.stagger:nth-child(17) { animation-delay: 1.17s; }
+.stagger:nth-child(18) { animation-delay: 1.24s; }
+
+/* Typography */
+.brand-label {
+  font-family: var(--sora);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.slide-heading {
+  font-family: var(--sora);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+.slide-heading .accent { color: var(--primary); }
+.slide-subheading {
+  font-family: var(--sora);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+.body-text {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.section-label {
+  font-family: var(--sora);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+/* Cover */
+.cover-brand { margin-bottom: 32px; }
+.cover-title {
+  font-family: var(--sora);
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+.cover-subtitle {
+  font-family: var(--sora);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-dim);
+  margin-bottom: 40px;
+}
+.cover-prepared {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.cover-prepared span { color: var(--primary); font-weight: 600; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  margin-bottom: 16px;
+}
+
+/* Before/After table */
+.ba-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ba-header {
+  font-family: var(--sora);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+.ba-header.before { background: var(--red-soft); color: var(--red); border: 1px solid var(--red-border); }
+.ba-header.after { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
+.ba-row {
+  display: contents;
+}
+.ba-cell {
+  font-size: 13.5px;
+  line-height: 1.55;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.ba-cell.before { color: var(--text-dim); }
+.ba-cell.after { color: var(--text); }
+
+/* Tier cards */
+.tiers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+.tier-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.tier-card.recommended {
+  border-color: var(--green-border);
+  box-shadow: 0 0 40px rgba(34,197,94,0.06), 0 0 80px rgba(34,197,94,0.03);
+  background: linear-gradient(135deg, rgba(34,197,94,0.04) 0%, var(--surface) 40%);
+}
+.tier-badge {
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  font-family: var(--sora);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: var(--green);
+  color: #fff;
+}
+.tier-name {
+  font-family: var(--sora);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.tier-desc {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.tier-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.tier-price-label {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.tier-price-value {
+  font-family: var(--sora);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.tier-price-gst {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.tier-features {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.tier-feature {
+  display: flex;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.tier-feature-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.recommended .tier-feature-dot { background: var(--green); }
+.recommended .tier-price-value { color: var(--green); }
+.tier-anchor {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.tier-anchor strong { color: var(--primary); font-weight: 600; }
+
+/* Retainer pillars */
+.retainer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 20px;
+}
+.retainer-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.retainer-card h4 {
+  font-family: var(--sora);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.retainer-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+
+/* Value pillars */
+.value-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.value-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+}
+.value-num {
+  font-family: var(--sora);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.value-card h3 {
+  font-family: var(--sora);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.value-card p {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.value-anchor {
+  margin-top: 12px;
+  font-family: var(--sora);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Summary */
+.summary-box {
+  background: var(--surface);
+  border: 2px solid var(--primary-border);
+  border-radius: 14px;
+  padding: 28px;
+  margin-top: 20px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-label { font-size: 14px; color: var(--text-dim); }
+.summary-value {
+  font-family: var(--sora);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.summary-total {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid var(--primary-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.summary-total .summary-label {
+  font-family: var(--sora);
+  font-weight: 700;
+  color: #fff;
+  font-size: 16px;
+}
+.summary-total .summary-value {
+  font-size: 24px;
+}
+
+/* Year comparison */
+.year-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.year-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+}
+.year-card.highlight {
+  border-color: var(--green-border);
+  background: var(--green-soft);
+}
+.year-label {
+  font-family: var(--sora);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.year-total {
+  font-family: var(--sora);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.year-breakdown {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.year-card.highlight .year-label { color: var(--green); }
+
+/* CTA */
+.cta-heading {
+  font-family: var(--sora);
+  font-size: 40px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.cta-sub {
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-dim);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.cta-btn {
+  display: block;
+  margin: 0 auto;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--sora);
+  font-size: 18px;
+  font-weight: 700;
+  padding: 16px 48px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.cta-btn:hover { background: #d13d08; transform: translateY(-1px); }
+.cta-btn.accepted { background: var(--green); cursor: default; }
+.cta-confirm {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--green);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.cta-confirm.show { opacity: 1; }
+
+/* Payment note */
+.payment-note {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Daily cost callout */
+.daily-cost {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-border);
+  border-radius: 12px;
+  text-align: center;
+}
+.daily-cost .big-num {
+  font-family: var(--sora);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary);
+}
+.daily-cost .label {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slide { padding: 50px 24px 90px; }
+  .dots-nav { display: none; }
+  .cover-title { font-size: 30px; }
+  .slide-heading { font-size: 26px; }
+  .ba-grid, .tiers-grid, .retainer-grid, .value-grid, .year-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter">01 / 08</div>
+<div class="dots-nav" id="dotsNav"></div>
+
+<button class="nav-btn nav-prev" id="prevBtn" onclick="navigate(-1)">&larr; Back</button>
+<button class="nav-btn nav-next" id="nextBtn" onclick="navigate(1)">Next &rarr;</button>
+
+<div class="slides-container" id="slidesContainer">
+
+  <!-- SLIDE 1: Cover -->
+  <div class="slide center-content active" data-slide="0">
+    <div class="slide-inner" style="text-align:center; max-width:700px;">
+      <div class="brand-label cover-brand stagger">OxyScale AI</div>
+      <h1 class="cover-title stagger">ForKeeps Merch<br><span class="accent">Sales Quoting Automation</span></h1>
+      <p class="cover-subtitle stagger">System Proposal</p>
+      <p class="cover-prepared stagger">Prepared by <span>OxyScale AI</span> / March 2026</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Where You Are Today -->
+  <div class="slide" data-slide="1">
+    <div class="slide-inner">
+      <div class="section-label stagger">Understanding Your Operations</div>
+      <h2 class="slide-heading stagger" style="margin-bottom:24px;">Where You Are <span class="accent">Today</span></h2>
+
+      <p class="body-text stagger" style="margin-bottom:16px;">ForKeeps Merch has built a strong branded merchandise brokerage. Customers come in through Google AdWords, enquire on the website, and deals land in HubSpot with structured data: product, quantity, colour, decoration type, pricing. The system is working.</p>
+
+      <p class="body-text stagger" style="margin-bottom:16px;">The opportunity is in what happens next. Your sales reps open each deal, manually build a quote using the HubSpot template, email it to the customer, then follow up on a manual schedule. For entry-level deals where the customer has already selected products and pricing is standardised from the website, this is process execution, not creative judgment. The information already exists in the system. A human is just assembling it.</p>
+
+      <p class="body-text stagger" style="margin-bottom:16px;">At roughly 500 quotes a month, that assembly work consumes a significant portion of your team's capacity. Enquiries that come in outside of business hours sit waiting. Busy periods mean follow-ups slip. Every hour spent on a standard quote is an hour not spent calling customers, building relationships, or closing bigger deals.</p>
+
+      <p class="body-text stagger" style="margin-bottom:24px;">This is not about replacing your sales team. It is about removing the repetitive, process-driven work so they can focus on what actually grows the business: being human, having conversations, and winning customers over.</p>
+
+      <div class="card stagger">
+        <div class="slide-subheading" style="margin-bottom:10px;">This System Is Not a New Hire</div>
+        <p class="body-text">It is day-one ready. It does not need onboarding. It works on every deal simultaneously, at 2am on a Saturday the same way it does at 10am on a Tuesday. No bad days, no forgotten follow-ups, no inconsistency. It runs alongside your team and handles the work that should never have required a person in the first place.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Before & After -->
+  <div class="slide" data-slide="2">
+    <div class="slide-inner">
+      <div class="section-label stagger">The Transformation</div>
+      <h2 class="slide-heading stagger" style="margin-bottom:24px;">Before <span class="accent">&</span> After</h2>
+
+      <div class="ba-grid">
+        <div class="ba-header before stagger">How It Works Today</div>
+        <div class="ba-header after stagger">How It Works With OxyScale</div>
+
+        <div class="ba-cell before stagger">Customer enquires on the website. Deal sits in HubSpot until a rep gets to it.</div>
+        <div class="ba-cell after stagger">Deal detected instantly. Data extracted and ready to go within seconds.</div>
+
+        <div class="ba-cell before stagger">Rep reads the deal and decides if it is standard or needs custom pricing.</div>
+        <div class="ba-cell after stagger">AI classifies the deal automatically and routes it down the right path.</div>
+
+        <div class="ba-cell before stagger">Rep manually builds a quote: line items, pricing, customer details, delivery charges.</div>
+        <div class="ba-cell after stagger">Quote assembled automatically using your existing HubSpot template with correct totals and GST.</div>
+
+        <div class="ba-cell before stagger">Rep writes an email, attaches the quote link, and sends it.</div>
+        <div class="ba-cell after stagger">Personalised email sent from the assigned rep's address. Customer cannot tell the difference.</div>
+
+        <div class="ba-cell before stagger">Rep updates the deal stage to "Quoted" and logs the activity.</div>
+        <div class="ba-cell after stagger">Deal stage, activity log, and timestamp all updated automatically.</div>
+
+        <div class="ba-cell before stagger">Follow-ups depend on the rep remembering. Busy weeks mean deals slip.</div>
+        <div class="ba-cell after stagger">Follow-ups fire at Day 2, 5, and 10 automatically. Every deal, every time.</div>
+
+        <div class="ba-cell before stagger">No visibility on whether the customer opened the email or viewed the quote.</div>
+        <div class="ba-cell after stagger">System tracks opens, clicks, and quote page views. Follow-up messaging adapts to engagement.</div>
+
+        <div class="ba-cell before stagger">Customer replies. Rep may not see it straight away.</div>
+        <div class="ba-cell after stagger">Reply detected instantly. Sequence paused. Slack alert and HubSpot task created for the rep.</div>
+
+        <div class="ba-cell before stagger">Complex deals sit with a rep until they have time to research and price it.</div>
+        <div class="ba-cell after stagger">AI searches your historical deals, suggests pricing with a confidence score, and gives the rep a head start.</div>
+
+        <div class="ba-cell before stagger">No daily summary of quoting activity. Pipeline visibility requires manual checking.</div>
+        <div class="ba-cell after stagger">Daily Slack digest covering quotes sent, deals awaiting response, and escalations needing attention.</div>
+
+        <div class="ba-cell before stagger">Deal goes cold. No one notices until it is too late.</div>
+        <div class="ba-cell after stagger">Cold deals flagged automatically. Team notified with a recommendation to follow up or close.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Your Options -->
+  <div class="slide" data-slide="3">
+    <div class="slide-inner">
+      <div class="section-label stagger">Your Investment</div>
+      <h2 class="slide-heading stagger" style="margin-bottom:8px;">Your <span class="accent">Options</span></h2>
+      <p class="body-text stagger" style="margin-bottom:8px;">We have structured two options based on the scope of what we build and manage for you. Both include a monthly retainer to keep the system running, monitored, and improving.</p>
+
+      <div class="tiers-grid">
+        <!-- Option 1 -->
+        <div class="tier-card stagger">
+          <div class="tier-name">Option 1: Standard Automation</div>
+          <div class="tier-desc">Handles the full quoting cycle for entry-level, standard-pricing deals. Detect, quote, email, follow up, and escalate to your team when anything falls outside the rules. Equivalent to what Viktor AI has proposed.</div>
+          <div class="tier-features">
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>HubSpot deal detection via webhook and scheduled scan</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Automated quote creation using your existing forKeeps Quote Template v3</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Personalised quote delivery email from assigned rep address</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Fixed follow-up sequence: Day 2, 5, and 10</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Customer reply detection with Slack alerts and HubSpot task creation</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Deal stage updates and full HubSpot audit trail</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Daily Slack summary and weekly reporting</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Non-standard deals escalated to a human via Slack notification</span></div>
+          </div>
+          <div class="tier-price-row">
+            <span class="tier-price-label">Build fee</span>
+            <span class="tier-price-value">$15,000 <span class="tier-price-gst">+ GST</span></span>
+          </div>
+          <div class="tier-price-row">
+            <span class="tier-price-label">Monthly retainer</span>
+            <span class="tier-price-value">$1,500 <span class="tier-price-gst">+ GST /mo</span></span>
+          </div>
+        </div>
+
+        <!-- Option 2 -->
+        <div class="tier-card recommended stagger">
+          <div class="tier-badge">Recommended</div>
+          <div class="tier-name">Option 2: Intelligent Automation</div>
+          <div class="tier-desc">Everything in Option 1, plus three layers of intelligence that mean more deals are handled automatically, your follow-ups are smarter, and your team gets a head start on every complex deal instead of building from scratch.</div>
+          <div class="tier-features">
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Everything in Option 1</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>AI deal classification: standard, complex, or borderline using pattern recognition</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Engagement-aware follow-ups: adapts messaging based on email opens, clicks, and quote page views</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>AI-powered complex deal pricing using your historical deal data</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Confidence scoring (1-10) with automatic routing by confidence level</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>Full context briefs for your team on escalated deals: similar past deals, suggested pricing, customer info</span></div>
+            <div class="tier-feature"><div class="tier-feature-dot"></div><span>AI pricing accuracy tracking over time</span></div>
+          </div>
+          <div class="tier-price-row">
+            <span class="tier-price-label">Build fee</span>
+            <span class="tier-price-value">$22,000 <span class="tier-price-gst">+ GST</span></span>
+          </div>
+          <div class="tier-price-row">
+            <span class="tier-price-label">Monthly retainer</span>
+            <span class="tier-price-value">$2,000 <span class="tier-price-gst">+ GST /mo</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-note stagger">All options are paid 50% upfront to commence the build. The remaining 50% is due on delivery once you are satisfied with the system. The retainer begins 30 days after the final build fee is paid and the system goes live.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: What Your Retainer Covers -->
+  <div class="slide" data-slide="4">
+    <div class="slide-inner">
+      <div class="section-label stagger">Ongoing Partnership</div>
+      <h2 class="slide-heading stagger" style="margin-bottom:8px;">What Your <span class="accent">Retainer</span> Covers</h2>
+      <p class="body-text stagger" style="margin-bottom:8px;">The build gets you live. The retainer keeps you running. This is not a software subscription. It is a fully managed service: we monitor, maintain, optimise, and improve the system on an ongoing basis.</p>
+
+      <div class="retainer-grid">
+        <div class="retainer-card stagger">
+          <h4>System Monitoring, Maintenance, and Bug Fixes</h4>
+          <p>We monitor the system daily. If a webhook fails, an API changes, or a deal gets stuck, we catch it and fix it before you even notice. HubSpot updates their platform, Slack changes their format? We handle it. Your system stays current without you lifting a finger.</p>
+        </div>
+        <div class="retainer-card stagger">
+          <h4>Ongoing Optimisation and Improvements</h4>
+          <p>Monthly review of system performance. We refine qualification rules, follow-up timing, email templates, and routing logic based on real conversion data. When new tools or capabilities become available that could improve your system, we assess and implement them.</p>
+        </div>
+        <div class="retainer-card stagger">
+          <h4>Strategy Sessions</h4>
+          <p>Regular check-ins to review what is working, identify new opportunities, and plan the next phase of automation across your business.</p>
+        </div>
+        <div class="retainer-card stagger">
+          <h4>Priority Support</h4>
+          <p>Direct access to our team. If something needs attention, you are not submitting a ticket into a queue. You message us and we handle it.</p>
+        </div>
+      </div>
+
+      <div class="daily-cost stagger" style="background:var(--green-soft); border-color:var(--green-border);">
+        <div class="big-num" style="color:var(--green);">~$67/day</div>
+        <div class="label">Option 2 retainer: roughly $67 per day for a fully managed automation service handling 500+ quotes a month</div>
+      </div>
+
+      <div class="card stagger" style="margin-top:20px;">
+        <div class="slide-subheading" style="margin-bottom:10px;">What Counts as Retainer vs a Separate Build</div>
+        <p class="body-text" style="margin-bottom:12px;">The retainer covers everything related to the system we build for you. Want to update an email template? Adjust the follow-up sequence? Add a new SMS touchpoint? Tweak something internal that does not require a full build? The retainer covers it.</p>
+        <p class="body-text" style="margin-bottom:12px;">Entirely new systems are scoped and priced separately depending on complexity. For example, adding the AI pricing layer to Option 1, integrating a Power BI dashboard, or building automated invoicing and payment tracking in HubSpot once quotes are accepted. These are separate builds with their own scope.</p>
+        <p class="body-text">We will always take into consideration our existing relationship when scoping future projects. Retainers do not automatically double the moment you add a new system on. They increase based on complexity and running costs. We want this to be a long-term partnership, and our pricing reflects that.</p>
+      </div>
+
+      <div class="card stagger" style="margin-top:16px; border-color:var(--primary-border); background:var(--primary-glow);">
+        <div class="section-label" style="margin-bottom:6px;">On the Roadmap</div>
+        <p class="body-text">Once the quoting system is live and proven, natural next steps include <strong style="color:var(--text);">automatic invoicing</strong> when quotes are accepted, with payment tracking directly in HubSpot so your team has visibility on what has been paid and what has not. This would be scoped as a separate build and added to the retainer accordingly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Is It Worth It -->
+  <div class="slide" data-slide="5">
+    <div class="slide-inner">
+      <div class="section-label stagger">The Value</div>
+      <h2 class="slide-heading stagger" style="margin-bottom:24px;">Is It <span class="accent">Worth It?</span></h2>
+
+      <div class="value-grid">
+        <div class="value-card stagger">
+          <div class="value-num">01</div>
+          <h3>Time Back at Scale</h3>
+          <p>At 500 quotes a month, every minute per quote adds up. If a quote takes 15 minutes of cumulative rep time across creation, emailing, follow-ups, and stage updates, that is 125 hours a month. If it is closer to 25 minutes, that is over 200 hours. You know the number. This system does it in seconds, around the clock, without breaks or holidays.</p>
+          <div class="value-anchor">125 to 200+ hours/month returned</div>
+        </div>
+        <div class="value-card stagger">
+          <div class="value-num">02</div>
+          <h3>Speed to Lead</h3>
+          <p>Enquiries that come in outside of business hours sit waiting until someone is available to action them. With automation, they get a quote in minutes regardless of when they come in. In promotional products, the first supplier to quote often wins. Faster response means higher conversion on the leads you are already paying for through AdWords.</p>
+          <div class="value-anchor">Minutes, not hours. 24/7.</div>
+        </div>
+        <div class="value-card stagger">
+          <div class="value-num">03</div>
+          <h3>Nothing Falls Through the Cracks</h3>
+          <p>Every deal gets a quote. Every quote gets follow-ups. Every follow-up gets logged. No deal sits forgotten because a rep was busy, on leave, or handling something else. The system does not have bad weeks.</p>
+          <div class="value-anchor">Zero missed follow-ups</div>
+        </div>
+        <div class="value-card stagger">
+          <div class="value-num">04</div>
+          <h3>Your Team Sells Instead of Processing</h3>
+          <p>The goal is a front-end that is super personal, wins customers over, and automates everything that does not need a human behind it. Every hour your team is freed from assembling standard quotes is an hour they can spend calling customers, building relationships, and closing bigger deals. Same headcount, more revenue.</p>
+          <div class="value-anchor">Capacity unlocked, permanently</div>
+        </div>
+        <div class="value-card stagger" style="grid-column: 1 / -1;">
+          <div class="value-num">05</div>
+          <h3>Room to Grow Without Adding Headcount</h3>
+          <p>Right now, increasing your ad spend or entering a new market means more leads, more quotes, and more strain on your sales team. With automation handling the quoting pipeline, that constraint disappears. You can turn up the dial on AdWords, test new channels, expand into new verticals, and the system absorbs the volume. Whether it is 500 quotes a month or 1,500, the workload for your team stays the same. More volume would naturally mean more strain on operations too, but that is something we can help with as the partnership evolves.</p>
+          <div class="value-anchor">Scale without the overhead</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: The Numbers -->
+  <div class="slide" data-slide="6">
+    <div class="slide-inner">
+      <div class="section-label stagger">The Numbers</div>
+      <h2 class="slide-heading stagger" style="margin-bottom:24px;">Year 1 vs <span class="accent">Year 2</span></h2>
+
+      <p class="body-text stagger" style="margin-bottom:8px;">The build is a one-time investment. From Year 2 onwards, you are only paying the retainer for a fully managed system that handles 500+ quotes a month.</p>
+
+      <div class="year-grid">
+        <div class="year-card stagger">
+          <div class="year-label">Year 1 / Option 1</div>
+          <div class="year-total">$33,000</div>
+          <div class="year-breakdown">$15,000 build + $1,500 x 12 months<br><span style="font-size:11px; color:var(--text-muted);">+ GST</span></div>
+        </div>
+        <div class="year-card stagger">
+          <div class="year-label">Year 2 / Option 1</div>
+          <div class="year-total">$18,000</div>
+          <div class="year-breakdown">$0 build + $1,500 x 12 months<br><span style="font-size:11px; color:var(--text-muted);">+ GST</span></div>
+        </div>
+        <div class="year-card highlight stagger">
+          <div class="year-label">Year 1 / Option 2</div>
+          <div class="year-total">$46,000</div>
+          <div class="year-breakdown">$22,000 build + $2,000 x 12 months<br><span style="font-size:11px; color:var(--text-muted);">+ GST</span></div>
+        </div>
+        <div class="year-card highlight stagger">
+          <div class="year-label">Year 2 / Option 2</div>
+          <div class="year-total">$24,000</div>
+          <div class="year-breakdown">$0 build + $2,000 x 12 months<br><span style="font-size:11px; color:var(--text-muted);">+ GST</span></div>
+        </div>
+      </div>
+
+      <p class="body-text stagger" style="margin-top:24px;">For Option 2, that is $24,000 a year from Year 2 onwards for a system that handles 500+ quotes a month, runs 24/7, adapts follow-ups to customer behaviour, and gives your team AI-powered pricing suggestions on complex deals. Compare that to the cost of the hours it replaces.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: CTA -->
+  <div class="slide center-content" data-slide="7">
+    <div class="slide-inner" style="text-align:center; max-width:600px;">
+      <div class="brand-label stagger" style="margin-bottom:24px;">OxyScale AI</div>
+      <h2 class="cta-heading stagger">Ready to <span class="accent">Work Smarter?</span></h2>
+      <p class="cta-sub stagger">Let us know which option works best and we will get the ball rolling.</p>
+      <div class="stagger" style="margin-top:48px; padding-top:32px; border-top:1px solid var(--border);">
+        <p style="font-size:14px; color:var(--text-dim); margin-bottom:16px;">Questions? Get in touch directly.</p>
+        <p style="font-size:15px; color:var(--text); margin-bottom:6px;"><strong>Jordan Bell</strong></p>
+        <p style="font-size:14px; color:var(--text-dim); margin-bottom:2px;">jordan@oxyscale.ai</p>
+        <p style="font-size:14px; color:var(--text-dim); margin-bottom:20px;">0478 197 600</p>
+        <p style="font-size:15px; color:var(--text); margin-bottom:6px;"><strong>George Harrad</strong></p>
+        <p style="font-size:14px; color:var(--text-dim);">george@oxyscale.ai</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const dotsNav = document.getElementById('dotsNav');
+const progressBar = document.getElementById('progressBar');
+const slideCounter = document.getElementById('slideCounter');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+// Build dots
+for (let i = 0; i < total; i++) {
+  const dot = document.createElement('button');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goTo(i);
+  dotsNav.appendChild(dot);
+}
+
+function goTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[currentSlide].classList.remove('active');
+  dotsNav.children[currentSlide].classList.remove('active');
+  currentSlide = n;
+  slides[currentSlide].classList.add('active');
+  dotsNav.children[currentSlide].classList.add('active');
+  updateUI();
+}
+
+function navigate(dir) { goTo(currentSlide + dir); }
+
+function updateUI() {
+  const pct = ((currentSlide + 1) / total) * 100;
+  progressBar.style.width = pct + '%';
+  slideCounter.textContent = String(currentSlide + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+  prevBtn.disabled = currentSlide === 0;
+  nextBtn.style.display = currentSlide === total - 1 ? 'none' : '';
+}
+
+// Keyboard nav
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+});
+
+// Touch support
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+});
+
+function acceptProposal() {
+  const btn = document.getElementById('ctaBtn');
+  btn.textContent = 'Accepted \u2713';
+  btn.classList.add('accepted');
+  btn.onclick = null;
+  document.getElementById('ctaConfirm').classList.add('show');
+}
+
+updateUI();
+</script>
+</body>
+</html>
